@@ -1,9 +1,12 @@
-.App {
+.outer-container {
+	padding: 40px;
+}
+
+.container {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 20px;
+	flex-direction: column;
 }
 
 .list {
@@ -11,13 +14,4 @@
 	flex-wrap: wrap;
 	gap: 20px;
 	justify-content: center;
-}
-
-.navbar nav  ul{
-	list-style: none;
-}
-
-.navbar nav ul {
-	display: flex;
-	gap: 50px;
 }
