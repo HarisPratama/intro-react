@@ -4,9 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './styles.css';
 import instance from '../../axios';
 import Card from '../../components/card';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Detail = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	const newsSelector = useSelector((state) => state);
 
 	const [movie, setMovie] = useState(null);
 	const [movieRecomendations, setMovieRecomendations] = useState([]);
@@ -27,7 +31,10 @@ const Detail = () => {
 			const getRecommendationsMovie = await instance.get(`/movie/${ id }/recommendations`);
 
 			if (getRecommendationsMovie.data) {
-				setMovieRecomendations(getRecommendationsMovie.data.results);
+				dispatch({
+					type: 'SET_NEWS_RECOMENDATION',
+					payload: getRecommendationsMovie.data.results
+				});
 			}
 		} catch (error) {
 			console.log(error.message, '<< error');
@@ -50,7 +57,7 @@ const Detail = () => {
 			) }
 
 			<div className='list'>
-				{ movieRecomendations.map(movie => (
+				{ newsSelector?.news?.newsRecomendation && newsSelector.news.newsRecomendation.map(movie => (
 					<div onClick={ () => toDetail(movie.id) }>
 						<Card
 							key={ movie.id }

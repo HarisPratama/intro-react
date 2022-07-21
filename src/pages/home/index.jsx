@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Card from '../../components/card';
 import instance from '../../axios';
+import { colorContext } from '../about';
+
 
 const Home = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [state, setState] = useState([]);
-	const [secondState, setSecondState] = useState([]);
+	const newsSelector = useSelector((state) => state.news);
+
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		fetchingData();
@@ -20,7 +25,11 @@ const Home = () => {
 			const getMovies = await instance.get('/movie/now_playing');
 
 			if (getMovies.data) {
-				setState(getMovies.data.results);
+				setLoading(false);
+				dispatch({
+					type: 'SET_NEWS',
+					payload: getMovies.data.results
+				});
 			}
 		} catch (error) {
 			console.log(error.message, '<< error');
@@ -33,15 +42,26 @@ const Home = () => {
 
 	return (
 		<div className="App">
-			<div className='list'>
-				{ state.map(movie => (
-					<div onClick={ () => toDetail(movie.id) } >
-						<Card
-							key={ movie.id }
-							movie={ movie }
-						/>
+			<div>
+				{ loading ? (
+					<div>
+						<h1>Loading........</h1>
 					</div>
-				)) }
+				) : (
+					<div className='list'>
+						{/* { JSON.stringify(newsSelector?.news) } */ }
+						{ newsSelector?.news && newsSelector?.news?.map((movie, i) => {
+							return (
+								<div onClick={ () => toDetail(movie.id) } >
+									<Card
+										key={ movie.id }
+										movie={ movie }
+									/>
+								</div>
+							);
+						}) }
+					</div>
+				) }
 			</div>
 		</div>
 	);
