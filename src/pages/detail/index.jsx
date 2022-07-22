@@ -18,8 +18,13 @@ const Detail = () => {
 	const { id } = useParams();
 
 	useEffect(() => {
+		const accessToken = localStorage.getItem('access_token');
+		if (!accessToken) {
+			navigate('/login');
+		}
+
 		fetchingData();
-	}, []);
+	}, [id]);
 
 	const fetchingData = async () => {
 		try {

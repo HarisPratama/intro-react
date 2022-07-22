@@ -10,3 +10,11 @@ const instance = axios.create({
 });
 
 export default instance;
+
+const secondInstances = axios.create({
+	baseURL: 'https://bem-ipb.herokuapp.com/'
+});
+
+export {
+	secondInstances
+};
