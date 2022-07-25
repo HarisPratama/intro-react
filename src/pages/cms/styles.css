@@ -1,0 +1,21 @@
+.cms-container {
+	display: flex;
+}
+
+.cms-container .sidebar {
+	width: 200px;
+	height: 100vh;
+	border-top: 1px solid gray;
+	border-right: 1px solid gray;
+}
+
+.cms-container .sidebar nav ul {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.cms-container .content {
+	width: 100%;
+	padding: 20px;
+}

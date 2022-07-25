@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Card from '../../components/card';
 import instance from '../../axios';
 import { colorContext } from '../about';
-
+import './styles.css';
+import Navbar from '../../components/navbar';
 
 const Home = () => {
 	const dispatch = useDispatch();
@@ -45,11 +46,6 @@ const Home = () => {
 		navigate('/detail/' + id);
 	};
 
-	const logout = () => {
-		localStorage.clear();
-		navigate('/login');
-	};
-
 	return (
 		<div className="App">
 			<div>
@@ -59,8 +55,8 @@ const Home = () => {
 					</div>
 				) : (
 					<div>
+						<Navbar />
 
-						<button onClick={ logout } >Logout</button>
 						<div className='list'>
 							{/* { JSON.stringify(newsSelector?.news) } */ }
 							{ newsSelector?.news && newsSelector?.news?.map((movie, i) => {

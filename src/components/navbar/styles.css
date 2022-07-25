@@ -1,0 +1,8 @@
+nav ul {
+	display: flex;
+	gap: 20px;
+	width: 100%;
+	list-style: none;
+	justify-content: space-between;
+	/* background: red; */
+}
