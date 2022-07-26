@@ -30,9 +30,11 @@ const Login = () => {
 
 			console.log(sendData, '<<< resp');
 
-			if (sendData.data.message == 'success') {
+			if (sendData.data?.message == 'success') {
 				localStorage.setItem('access_token', sendData.data.token);
 				navigate('/');
+			} else {
+				setErrorMessage('Login failed');
 			}
 
 		} catch (error) {
@@ -52,6 +54,8 @@ const Login = () => {
 	return (
 		<div className='container'>
 			<h1>Login</h1>
+
+			<p>{ errorMessage }</p>
 
 			<form onSubmit={ onSubmit }>
 				<label htmlFor="email">Email</label>

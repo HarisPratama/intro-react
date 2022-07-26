@@ -1,6 +1,7 @@
 const initialState = {
 	news: [],
-	newsRecomendation: []
+	newsRecomendation: [],
+	detailNews: {}
 };
 
 const newsReducers = (state = initialState, action) => {
@@ -9,6 +10,8 @@ const newsReducers = (state = initialState, action) => {
 			return { ...state, news: action.payload };
 		case 'SET_NEWS_RECOMENDATION':
 			return { ...state, newsRecomendation: action.payload };
+		case 'SET_DETAIL_NEWS':
+			return { ...state, detailNews: action.payload };
 		default:
 			return state;
 	}

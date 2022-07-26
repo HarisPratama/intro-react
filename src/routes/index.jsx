@@ -11,6 +11,7 @@ import Detail from '../pages/detail';
 import Home from '../pages/home';
 import Login from '../pages/login';
 import News from '../pages/news';
+import EditNews from '../pages/news/edit';
 import Register from '../pages/register';
 
 const RouterComponent = () => {
@@ -25,6 +26,7 @@ const RouterComponent = () => {
 				<Route path='/cms' element={ <Cms /> } />
 				<Route path='/news' element={ <News /> } />
 				<Route path='/detail/:id' element={ <Detail /> } />
+				<Route path='/news/:id' element={ <EditNews /> } />
 			</Routes>
 		</Router>
 	);

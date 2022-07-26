@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { secondInstances } from "../../axios";
 import Cms from "../cms";
 import './styles.css';
 
 const News = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const news = useSelector(state => state.news.news);
@@ -18,6 +20,7 @@ const News = () => {
 	});
 
 	const [showFrom, setShowForm] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		fetchNews();
@@ -43,7 +46,7 @@ const News = () => {
 		const value = e.target.value;
 
 		if (e.target.files) {
-			setForm({ ...form, images: e.target.files });
+			setForm({ ...form, images: e.target.files[0] });
 		} else {
 			setForm({ ...form, [name]: value });
 		}
@@ -51,7 +54,7 @@ const News = () => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-
+		setLoading(true);
 		try {
 			const formData = new FormData();
 
@@ -69,9 +72,13 @@ const News = () => {
 		} catch (error) {
 			console.log(error);
 		}
+
+		setShowForm(false);
+		setLoading(false);
 	};
 
 	const deleteNews = async (id) => {
+		setLoading(true);
 		try {
 			const sendData = await secondInstances.delete(`news/${ id }`);
 
@@ -82,6 +89,11 @@ const News = () => {
 		} catch (error) {
 			console.log(error);
 		}
+		setLoading(false);
+	};
+
+	const editNews = (id) => {
+		navigate(`/news/${ id }`);
 	};
 
 	return (
@@ -96,8 +108,24 @@ const News = () => {
 			</div>
 
 			{ showFrom &&
-				<div style={ { display: 'flex', justifyContent: 'center' } }>
-					<form onSubmit={ onSubmit }>
+				<div style={ {
+					position: 'fixed',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					top: 0,
+					left: 0,
+					background: 'rgba(0, 0, 0, 0.7)',
+					width: '100%',
+					height: '100%',
+				} }>
+					<form
+						onSubmit={ onSubmit }
+						style={ {
+							background: '#ffff',
+							padding: '20px'
+						} }
+					>
 						<label htmlFor="">Title</label>
 						<br />
 						<input type="text" name="title" onChange={ onChange } /><br /><br />
@@ -114,7 +142,14 @@ const News = () => {
 						<br />
 						<input type="file" name="images" onChange={ onChange } /><br /><br />
 
-						<input type="submit" value="Tambah News" />
+						{ loading
+							?
+							<div>
+								Loading...
+							</div>
+							:
+							<input type="submit" value="Tambah News" />
+						}
 					</form>
 				</div>
 			}
@@ -139,9 +174,20 @@ const News = () => {
 							<img src={ data.images } height='50px' />
 						</td>
 						<td>
-							<button
-								onClick={ () => deleteNews(data._id) }
-							>Delete</button>
+							{ loading ?
+								<div>
+									Loading...
+								</div>
+								:
+								<div style={ { display: 'flex', gap: '20px' } }>
+									<button
+										onClick={ () => editNews(data._id) }
+									>Edit</button>
+									<button
+										onClick={ () => deleteNews(data._id) }
+									>Delete</button>
+								</div>
+							}
 						</td>
 					</tr>
 				) }
