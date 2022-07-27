@@ -2,6 +2,7 @@ import { combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
 import newsReducers from './reducers/news';
+import moviesReducer from './reducers/movies';
 
 // const reducers = combineReducers({
 // 	news: newsReducers
@@ -10,6 +11,7 @@ import newsReducers from './reducers/news';
 const reducers = {
 	reducer: {
 		news: newsReducers,
+		movies: moviesReducer
 	}
 };
 

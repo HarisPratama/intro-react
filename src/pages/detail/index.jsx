@@ -5,15 +5,13 @@ import './styles.css';
 import instance from '../../axios';
 import Card from '../../components/card';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchingMovie, fetchingMovieRecommendations } from '../../store/reducers/movies';
 
 const Detail = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const newsSelector = useSelector((state) => state);
-
-	const [movie, setMovie] = useState(null);
-	const [movieRecomendations, setMovieRecomendations] = useState([]);
+	const moviesSelector = useSelector((state) => state.movies);
 
 	const { id } = useParams();
 
@@ -21,30 +19,11 @@ const Detail = () => {
 		const accessToken = localStorage.getItem('access_token');
 		if (!accessToken) {
 			navigate('/login');
+		} else {
+			dispatch(fetchingMovie(id));
+			dispatch(fetchingMovieRecommendations(id));
 		}
-
-		fetchingData();
 	}, [id]);
-
-	const fetchingData = async () => {
-		try {
-			const getDetail = await instance.get('/movie/' + id);
-			if (getDetail.data) {
-				setMovie(getDetail.data);
-			}
-
-			const getRecommendationsMovie = await instance.get(`/movie/${ id }/recommendations`);
-
-			if (getRecommendationsMovie.data) {
-				dispatch({
-					type: 'SET_NEWS_RECOMENDATION',
-					payload: getRecommendationsMovie.data.results
-				});
-			}
-		} catch (error) {
-			console.log(error.message, '<< error');
-		}
-	};
 
 	const toDetail = (id) => {
 		navigate('/detail/' + id);
@@ -53,16 +32,17 @@ const Detail = () => {
 
 	return (
 		<div className='outer-container'>
-			{ movie && (
-				<div className='container'>
-					<p>{ movie.original_title }</p>
-					{ <img src={ 'https://image.tmdb.org/t/p/w500' + movie.poster_path } width='100px' /> }
-					<p>{ movie.overview }</p>
+			{ moviesSelector.loading && <h1>Loading...</h1> }
+			{ !moviesSelector.loading && moviesSelector?.movie && (
+				<div className='container-movies'>
+					<p>{ moviesSelector?.movie.original_title }</p>
+					{ <img src={ 'https://image.tmdb.org/t/p/w500' + moviesSelector?.movie.poster_path } width='100px' /> }
+					<p>{ moviesSelector?.movie.overview }</p>
 				</div>
 			) }
 
 			<div className='list'>
-				{ newsSelector?.news?.newsRecomendation && newsSelector.news.newsRecomendation.map(movie => (
+				{ !moviesSelector.loading && moviesSelector?.recommendations && moviesSelector.recommendations.map(movie => (
 					<div onClick={ () => toDetail(movie.id) }>
 						<Card
 							key={ movie.id }

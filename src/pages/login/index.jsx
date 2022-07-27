@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { secondInstances } from '../../axios';
 
 import './styles.css';
 
 const Login = () => {
 	const navigate = useNavigate();
+	let location = useLocation();
+
 
 	const [loading, setLoading] = useState(false);
 	const [form, setForm] = useState({
@@ -14,21 +16,12 @@ const Login = () => {
 	});
 	const [errorMessage, setErrorMessage] = useState('');
 
-	useEffect(() => {
-		const accessToken = localStorage.getItem('access_token');
-		if (accessToken) {
-			navigate('/');
-		}
-	}, []);
-
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
 
 		try {
 			const sendData = await secondInstances.post('user/login', form);
-
-			console.log(sendData, '<<< resp');
 
 			if (sendData.data?.message == 'success') {
 				localStorage.setItem('access_token', sendData.data.token);

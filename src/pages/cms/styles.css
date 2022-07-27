@@ -2,6 +2,10 @@
 	display: flex;
 }
 
+.bold {
+	font-weight: 700;
+}
+
 .cms-container .sidebar {
 	width: 200px;
 	height: 100vh;

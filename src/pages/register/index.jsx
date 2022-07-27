@@ -16,13 +16,6 @@ const Register = () => {
 	});
 	const [errorMessage, setErrorMessage] = useState('');
 
-	useEffect(() => {
-		const accessToken = localStorage.getItem('access_token');
-		if (accessToken) {
-			navigate('/');
-		}
-	}, []);
-
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		setLoading(true);

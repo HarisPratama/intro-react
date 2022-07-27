@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { secondInstances } from "../../axios";
+import { fetchnews } from "../../store/reducers/news";
 import Cms from "../cms";
 import './styles.css';
 
@@ -23,23 +24,8 @@ const News = () => {
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		fetchNews();
+		dispatch(fetchnews());
 	}, []);
-
-	const fetchNews = async () => {
-		try {
-			const getData = await secondInstances.get('news');
-			if (getData.data.data) {
-				dispatch({
-					type: 'SET_NEWS',
-					payload: getData.data.data,
-				});
-			}
-
-		} catch (error) {
-			console.log(error, '<<< error');
-		}
-	};
 
 	const onChange = (e) => {
 		const name = e.target.name;
@@ -64,9 +50,8 @@ const News = () => {
 
 			const sendData = await secondInstances.post('news', formData);
 
-
 			if (sendData.status == 200) {
-				fetchNews();
+				dispatch(fetchnews());
 			}
 
 		} catch (error) {
@@ -83,7 +68,7 @@ const News = () => {
 			const sendData = await secondInstances.delete(`news/${ id }`);
 
 			if (sendData.status == 200) {
-				fetchNews();
+				dispatch(fetchnews());
 			}
 
 		} catch (error) {
@@ -191,6 +176,8 @@ const News = () => {
 						</td>
 					</tr>
 				) }
+
+
 
 			</table>
 		</Cms>

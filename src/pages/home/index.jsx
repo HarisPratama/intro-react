@@ -8,39 +8,19 @@ import instance from '../../axios';
 import { colorContext } from '../about';
 import './styles.css';
 import Navbar from '../../components/navbar';
+import { fetchingMovies } from '../../store/reducers/movies';
 
 const Home = () => {
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const newsSelector = useSelector((state) => state.news);
-
-	const [loading, setLoading] = useState(true);
+	const moviesSelector = useSelector((state) => state.movies);
+	const loadingFetchMovies = useSelector((state) => state.movies.loading);
 
 	useEffect(() => {
-		const accessToken = localStorage.getItem('access_token');
-		if (!accessToken) {
-			navigate('/login');
-		}
-
-		fetchingData();
+		dispatch(fetchingMovies());
 	}, []);
-
-	const fetchingData = async () => {
-		try {
-			const getMovies = await instance.get('/movie/now_playing');
-
-			if (getMovies.data) {
-				setLoading(false);
-				dispatch({
-					type: 'SET_NEWS',
-					payload: getMovies.data.results
-				});
-			}
-		} catch (error) {
-			console.log(error.message, '<< error');
-		}
-	};
 
 	const toDetail = (id) => {
 		navigate('/detail/' + id);
@@ -49,7 +29,7 @@ const Home = () => {
 	return (
 		<div className="App">
 			<div>
-				{ loading ? (
+				{ loadingFetchMovies ? (
 					<div>
 						<h1>Loading........</h1>
 					</div>
@@ -58,8 +38,8 @@ const Home = () => {
 						<Navbar />
 
 						<div className='list'>
-							{/* { JSON.stringify(newsSelector?.news) } */ }
-							{ newsSelector?.news && newsSelector?.news?.map((movie, i) => {
+							{/* { JSON.stringify(moviesSelector?.news) } */ }
+							{ moviesSelector?.movies && moviesSelector?.movies?.map((movie, i) => {
 								return (
 									<div onClick={ () => toDetail(movie.id) } >
 										<Card

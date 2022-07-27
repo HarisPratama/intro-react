@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
 import { secondInstances } from "../../../axios";
+import { fetchDetailNews } from "../../../store/reducers/news";
 import Cms from "../../cms";
 
 const EditNews = () => {
@@ -9,11 +10,13 @@ const EditNews = () => {
 	const navigate = useNavigate();
 
 	const detailNews = useSelector(state => state.news.detailNews);
+	const loadingNews = useSelector(state => state.news.loading);
 
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(false);
 	const [renderLoading, setRenderLoading] = useState(false);
+	const [img, setImg] = useState(null);
 
 	const [form, setForm] = useState({
 		title: '',
@@ -24,29 +27,13 @@ const EditNews = () => {
 
 	useEffect(() => {
 		if (id) {
-			fetchDetailNews();
+			dispatch(fetchDetailNews(id));
 		}
 	}, []);
 
 	useEffect(() => {
 		setForm(detailNews);
 	}, [detailNews]);
-
-	const fetchDetailNews = async () => {
-		setRenderLoading(true);
-		try {
-			const getDetailNews = await secondInstances.get(`news/${ id }`);
-			if (getDetailNews.data?.status == 200) {
-				dispatch({
-					type: 'SET_DETAIL_NEWS',
-					payload: getDetailNews.data.data
-				});
-				setRenderLoading(false);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
@@ -79,6 +66,8 @@ const EditNews = () => {
 
 		if (e.target.files) {
 			setForm({ ...form, images: e.target.files[0] });
+			const [file] = e.target.files;
+			setImg(URL.createObjectURL(file));
 		} else {
 			setForm({ ...form, [name]: value });
 		}
@@ -87,7 +76,9 @@ const EditNews = () => {
 	return (
 		<Cms>
 			<div>
-				{ renderLoading ?
+				{ JSON.stringify(loadingNews) }
+
+				{ loadingNews ?
 					<div>
 						Loading...
 					</div>
@@ -106,11 +97,18 @@ const EditNews = () => {
 							name="title"
 							value={ form.title }
 							onChange={ onChange }
+							style={ {
+								border: '1px solid red',
+								color: 'red',
+								fontWeight: '700',
+							} }
 						/><br /><br />
 
 						<label htmlFor="">Description</label>
 						<br />
-						<input
+						<textarea
+							rows={ 12 }
+							style={ { border: '1px solid yellow' } }
 							type="text"
 							name="desc"
 							value={ form.desc }
@@ -128,7 +126,7 @@ const EditNews = () => {
 
 						<label htmlFor="">Image</label>
 						<br />
-						<img src={ form.images } alt="" width={ '200px' } />
+						<img src={ img ?? form.images } alt="" width={ '200px' } />
 						<br />
 						<input type="file" name="images" onChange={ onChange } /><br /><br />
 
