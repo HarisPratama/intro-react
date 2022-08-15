@@ -24,6 +24,8 @@ const Chat = () => {
 	const [message, setMessage] = useState('');
 	const [pickUser, setPickUser] = useState(null);
 
+	const [onSending, setOnSending] = useState(false);
+
 	useEffect(() => {
 		if (user) {
 			socket.on('chat', (...args) => {
@@ -41,6 +43,7 @@ const Chat = () => {
 
 	const sendMessage = (e) => {
 		e.preventDefault()
+		setOnSending(true)
 
 		const data = {
 			sender: user,
@@ -61,8 +64,8 @@ const Chat = () => {
 			</div>
 		)
 	} else return (
-		<div style={{ height: '100vh', display: 'flex' }}>
-			<div style={{ width: '200px', height: '100%', borderRight: '1px solid grey' }}>
+		<div style={{ display: 'flex' }}>
+			<div style={ { width: '200px', height: '100vh', borderRight: '1px solid grey' }}>
 				{ users.map(item => (
 					<>
 						{item.id != user &&
@@ -73,10 +76,10 @@ const Chat = () => {
 					</>
 				)) }
 			</div>
-			<div style={{ padding: '40px', position: 'relative', width: '100%' }}>
-				<div>
+			<div style={{ padding: '40px', position: 'relative', width: '100%', maxHeight: '100vh' }}>
+				<div style={{ height: '500px', overflowY: 'auto', display: 'block', position: 'static' }}>
 					{ pickUser && chats && chats?.length && chats?.map(chat => (
-						<div style={ { display: 'flex', flexDirection: 'column', width: '100%', padding: '20px' }} key={chat.id}>
+						<div style={ { display: 'flex', flexDirection: 'column', padding: '20px' }} key={chat.id}>
 								{chat.sender == user ? 
 								<div style={{ alignSelf: 'end', background: 'green', color: 'white', padding: '10px', borderRadius: '8px' }}>
 									{chat.message}
