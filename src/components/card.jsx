@@ -6,9 +6,9 @@ const Card = ({ movie, key }) => {
 
 	if (movie) return (
 		<div key={ movie.id } className='card' >
-			<img src={ 'https://image.tmdb.org/t/p/w500' + movie.poster_path } height='100px' />
+			{/* <img src={ 'https://image.tmdb.org/t/p/w500' + movie.poster_path } height='100px' /> */}
 			<h5>{ movie.title }</h5>
-			<p>{ movie.overview }</p>
+			<p>{ movie.desc }</p>
 		</div>
 	);
 

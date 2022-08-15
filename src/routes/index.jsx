@@ -14,6 +14,7 @@ import Login from '../pages/login';
 import News from '../pages/news';
 import EditNews from '../pages/news/edit';
 import Register from '../pages/register';
+import Chat from '../pages/chat';
 
 const RouterComponent = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,6 +35,7 @@ const RouterComponent = () => {
 					<>
 						<Route path='/register' element={ <Register /> } />
 						<Route path='/login' element={ <Login /> } />
+						<Route path='/chat' element={ <Chat /> } />
 					</>
 					:
 					<>
@@ -46,7 +48,7 @@ const RouterComponent = () => {
 					</>
 				}
 
-				<Route path="*" element={ <NoMatch /> } />
+				{/* <Route path="*" element={ <NoMatch /> } /> */}
 
 			</Routes>
 		</Router>

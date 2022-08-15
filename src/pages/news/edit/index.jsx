@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
-import { secondInstances } from "../../../axios";
+import instance, { secondInstances } from "../../../axios";
 import { fetchDetailNews } from "../../../store/reducers/news";
 import Cms from "../../cms";
 
@@ -45,7 +45,7 @@ const EditNews = () => {
 			// 	formData.append(key, form[key]);
 			// });
 
-			const sendData = await secondInstances.put(`news/${ id }`, form);
+			const sendData = await instance.put(`/news/${ id }`, form);
 
 			console.log(sendData, '<<< sendData');
 
@@ -115,7 +115,7 @@ const EditNews = () => {
 							onChange={ onChange }
 						/><br /><br />
 
-						<label htmlFor="">Category</label>
+						{/* <label htmlFor="">Category</label>
 						<br />
 						<input
 							type="text"
@@ -128,7 +128,7 @@ const EditNews = () => {
 						<br />
 						<img src={ img ?? form.images } alt="" width={ '200px' } />
 						<br />
-						<input type="file" name="images" onChange={ onChange } /><br /><br />
+						<input type="file" name="images" onChange={ onChange } /><br /><br /> */}
 
 						{ loading
 							?

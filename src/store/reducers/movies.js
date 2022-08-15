@@ -30,13 +30,14 @@ export function fetchingMovies() {
 	return async (dispatch) => {
 		dispatch(setMoviesLoading(true));
 		try {
-			const getData = await instance.get('/movie/now_playing');
+			const getData = await instance.get('/articles');
 
-			if (getData.data?.results) {
-				dispatch(setMovies(getData.data.results));
+			if (getData.data?.data) {
+				dispatch(setMovies(getData.data.data));
 				dispatch(setMoviesLoading(false));
 			}
 		} catch (error) {
+			console.log(error, '<< error');
 			dispatch(setMoviesError(error));
 			dispatch(setMoviesLoading(false));
 		}

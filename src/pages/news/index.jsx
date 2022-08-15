@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { secondInstances } from "../../axios";
+import instance, { secondInstances } from "../../axios";
 import { fetchnews } from "../../store/reducers/news";
 import Cms from "../cms";
 import './styles.css';
@@ -42,15 +42,9 @@ const News = () => {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			const formData = new FormData();
+			const sendData = await instance.post('/news', form);
 
-			Object.keys(form).map(key => {
-				formData.append(key, form[key]);
-			});
-
-			const sendData = await secondInstances.post('news', formData);
-
-			if (sendData.status == 200) {
+			if (sendData.data?.message === "Success add news") {
 				dispatch(fetchnews());
 			}
 
@@ -65,9 +59,9 @@ const News = () => {
 	const deleteNews = async (id) => {
 		setLoading(true);
 		try {
-			const sendData = await secondInstances.delete(`news/${ id }`);
+			const sendData = await instance.delete(`/news/${ id }`);
 
-			if (sendData.status == 200) {
+			if (sendData.data?.message == `Success delete article with id ${id}`) {
 				dispatch(fetchnews());
 			}
 
@@ -119,13 +113,13 @@ const News = () => {
 						<br />
 						<input type="text" name="desc" onChange={ onChange } /><br /><br />
 
-						<label htmlFor="">Category</label>
+						{/* <label htmlFor="">Category</label>
 						<br />
 						<input type="text" name="category" onChange={ onChange } /><br /><br />
 
 						<label htmlFor="">Image</label>
 						<br />
-						<input type="file" name="images" onChange={ onChange } /><br /><br />
+						<input type="file" name="images" onChange={ onChange } /><br /><br /> */}
 
 						{ loading
 							?
@@ -136,6 +130,8 @@ const News = () => {
 							<input type="submit" value="Tambah News" />
 						}
 					</form>
+
+					<button onClick={ () => setShowForm(false) }>Close</button>
 				</div>
 			}
 
@@ -166,10 +162,10 @@ const News = () => {
 								:
 								<div style={ { display: 'flex', gap: '20px' } }>
 									<button
-										onClick={ () => editNews(data._id) }
+										onClick={ () => editNews(data.id) }
 									>Edit</button>
 									<button
-										onClick={ () => deleteNews(data._id) }
+										onClick={ () => deleteNews(data.id) }
 									>Delete</button>
 								</div>
 							}

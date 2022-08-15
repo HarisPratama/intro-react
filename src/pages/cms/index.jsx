@@ -7,18 +7,6 @@ import './styles.css';
 
 const Cms = ({ children }) => {
 
-	const navigate = useNavigate();
-
-	const [state, setState] = useState(0);
-	const [bold, setBold] = useState(false);
-
-	useEffect(() => {
-		const accessToken = localStorage.getItem('access_token');
-		if (!accessToken) {
-			navigate('/login');
-		}
-	}, []);
-
 	return (
 		<div>
 			<Navbar />

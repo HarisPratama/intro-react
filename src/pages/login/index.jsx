@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { secondInstances } from '../../axios';
+import instance, { secondInstances } from '../../axios';
 
 import './styles.css';
 
@@ -21,10 +21,10 @@ const Login = () => {
 		setLoading(true);
 
 		try {
-			const sendData = await secondInstances.post('user/login', form);
+			const sendData = await instance.post('auth/login', form);
 
-			if (sendData.data?.message == 'success') {
-				localStorage.setItem('access_token', sendData.data.token);
+			if (sendData.status === 200) {
+				localStorage.setItem('access_token', sendData.data.data);
 				navigate('/');
 			} else {
 				setErrorMessage('Login failed');

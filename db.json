@@ -1,0 +1,21 @@
+{
+	"user": [
+		{
+			"id":1,
+			"name": "Haris",
+			"role": "Seller",
+			"products": [
+				{
+					"id": 1,
+					"name": "Skincare",
+					"seller_id": 1
+				},
+				{
+					"id": 2,
+					"name": "Migor",
+					"seller_id": 1
+				}
+			]
+		}
+	]
+}

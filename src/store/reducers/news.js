@@ -1,4 +1,4 @@
-import { secondInstances } from "../../axios";
+import instance, { secondInstances } from "../../axios";
 import { setDetailNews, setErrorNews, setNews, setNewsLoading } from "../actions/news";
 
 const initialState = {
@@ -33,7 +33,8 @@ export function fetchnews() {
 		dispatch(setNewsLoading(true));
 
 		try {
-			const getData = await secondInstances.get('news');
+			const getData = await instance.get('/news');
+
 			if (getData.data?.data) {
 				dispatch(setNews(getData.data.data));
 				dispatch(setNewsLoading(false));
@@ -51,7 +52,7 @@ export function fetchDetailNews(id) {
 		dispatch(setNewsLoading(true));
 
 		try {
-			const getDetailNews = await secondInstances.get(`news/${ id }`);
+			const getDetailNews = await instance.get(`/news/${ id }`);
 			if (getDetailNews.data?.data) {
 				dispatch(setDetailNews(getDetailNews.data.data));
 				dispatch(setNewsLoading(false));
